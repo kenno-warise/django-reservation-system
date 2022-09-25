@@ -20,7 +20,7 @@ class Reserve(models.Model):
     comment = models.TextField()
 
     def __str__(self):
-        return self.reserve_date
+        return self.name
 
 class Shop(models.Model):
     """
@@ -35,7 +35,5 @@ class Shop(models.Model):
     end_time = models.TimeField()
     max_reserve_num = models.IntegerField()
 
-    def __str__(self):
-        return self.reservable_date
 
 # Create your models here.
