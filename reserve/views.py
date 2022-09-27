@@ -1,7 +1,20 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+
+from .forms import ReserveForm
 
 def index(request):
-    return render(request, 'reserve/index.html')
+    if request.method == "POST":
+        print('テスト', request.POST)
+        form = ReserveForm(request.POST)
+        print('----')
+        print(form.is_valid())
+        if form.is_valid():
+            print('通過')
+            form.save()
+            return redirect('reserve:confirm')
+    else:
+        form = ReserveForm()
+    return render(request, 'reserve/index.html', {'form':form})
 
 def confirm(request):
     return render(request, 'reserve/confirm.html')
