@@ -1,3 +1,4 @@
+from django.core.validators import RegexValidator
 from django.db import models
 
 class Shop(models.Model):
@@ -49,6 +50,7 @@ class Reserve(models.Model):
             verbose_name='予約日',
             max_length=20,
             choices=date_choices,
+            # error_messages={"required": "必須！"}
     )
     # reserve_date = models.ForeignKey(Shop, on_delete=models.PROTECT, verbose_name='予約日')
     reserve_time = models.CharField(
@@ -61,10 +63,24 @@ class Reserve(models.Model):
             max_length=10,
             choices=num_choices,
     )
-    name = models.CharField(verbose_name='氏名', max_length=100)
-    email = models.EmailField(verbose_name='メールアドレス', max_length=254)
-    tel = models.CharField(verbose_name='電話番号', max_length=20)
-    comment = models.TextField(verbose_name='備考欄')
+    name = models.CharField(verbose_name='氏名', max_length=20)
+    email = models.EmailField(verbose_name='メールアドレス', max_length=100)
+    # RegexValidatorを使用すると正規表現でバリデーションをかけることができる
+    num_regex = RegexValidator(
+            regex=r'^0[789]0-\d{4}-\d{4}',
+            message=("「例：080-1234-5678」のように入力してください。")
+    )
+    tel = models.CharField(
+            verbose_name='電話番号',
+            max_length=20,
+            validators=[num_regex]
+    )
+    comment = models.TextField(
+            null=True, # DB内にNULLとして空の値を保持する
+            blank=True, # フィールドがブランク（空白）になることが許容される
+            verbose_name='備考欄',
+            max_length=1000,
+    )
     """
     def __str__(self):
         return str(self.reserve_date)
