@@ -20,58 +20,64 @@
 
     <h1>ご来店予約</h1>
 
-    <form class="m-3" method="POST" action="{% url 'reserve:index' %}">
+    <form class="m-3" method="POST" action="{% url 'reserve:index' %}" novalidate>
       {% csrf_token %}
-      <div class="mb-3">
-	<label for="exampleFormControlInput1" class="form-label">【1】　予約日を選択</label>
-	{{ form.reserve_date }}
-	<!--<select class="form-select" name="reserve_date">
-	  <option selected>日付</option>
-	  <option value="1">6/1</option>
-	  <option value="2">6/2</option>
-	  <option value="3">6/3</option>
-	</select>-->    </div>
-	<div class="mb-3">
-	  <label for="exampleFormControlInput1" class="form-label">【2】　人数を選択</label>
-	{{ form.reserve_num }}
-	<!--<select class="form-select" name="reserve_num">
-	    <option selected>人数</option>
-	    <option value="1">1</option>
-	    <option value="2">2</option>
-	    <option value="3">3</option>
-	</select>-->    </div>
-	  <div class="mb-3">
-	    <label for="exampleFormControlInput1" class="form-label">【3】　予約時間を選択</label>
-	   {{ form.reserve_time }}
-	   <!--<select class="form-select" name="reserve_time">
-	      <option selected>時間</option>
-	      <option value="1">14:00</option>
-	      <option value="2">15:00</option>
-	      <option value="3">16:00</option>
-	   </select>-->    </div>
-	    <div class="mb-3">
-	      <label for="exampleFormControlInput1" class="form-label">【4】　予約情報を選択</label>
-	      {{ form.name }}
-	      <!--<input type="text" class="form-control" name="name" placeholder="氏名">-->
-	    </div>
-	    <div class="mb-3">
-	      {{ form.email }}
-	      <!--<input type="email" class="form-control" name="email" placeholder="メールアドレス">-->
-	    </div>
-	    <div class="mb-3">
-	      {{ form.tel }}
-	      <!--<input type="tel" class="form-control" name="tel" placeholder="電話番号">-->
-	    </div>
-	    <div class="mb-3">
-	      <label for="exampleFormControlTextarea1" class="form-label">【5】　備考欄</label>
-	      {{ form.comment }}
-	      <!--<textarea class="form-control" name="comment" rows="3" placeholder="備考欄"></textarea>-->
-	    </div>
+      <!-- formのインスタンス変数にはform.as_pやイテレーションで出力できるが、以下のやり方は今回の実装にちょうど良い
 
-	    <div class="d-grid gap-2">
-	      <button class="btn btn-primary rounded-pill" type="submit">確認画面へ</button>
-	      <button class="btn btn-secondary rounded-pill" type="button">戻る</button>
-	    </div>
+	{ form.reserve_date.label }} フィールドのラベル
+	{ form.reserve_date }} フィールドの要素
+	{ form.reserve_date.errors.0 }} フィールドの要素のエラー
+      -->
+
+      <div class="mb-3">
+	<label for="exampleFormControlInput1" class="form-label">{{ form.reserve_date.label }}</label>
+	{{ form.reserve_date }}
+	<div class="invalid-feedback">
+	  {{ form.reserve_date.errors.0 }}
+	</div>
+      </div>
+      <div class="mb-3">
+	<label for="exampleFormControlInput1" class="form-label">{{ form.reserve_num.label }}</label>
+	{{ form.reserve_num }}
+	<div class="invalid-feedback">
+	  {{ form.reserve_num.errors.0 }}
+	</div>
+      </div>
+      <div class="mb-3">
+	<label for="exampleFormControlInput1" class="form-label">{{ form.reserve_time.label }}</label>
+	{{ form.reserve_time }}
+	<div class="invalid-feedback">
+	  {{ form.reserve_time.errors.0 }}
+	</div>
+      </div>
+      <div class="mb-3">
+	<label for="exampleFormControlInput1" class="form-label">{{ form.name.label }}</label>
+	{{ form.name }}
+	<div class="invalid-feedback">
+	  {{ form.name.errors.0 }}
+	</div>
+      </div>
+      <div class="mb-3">
+	{{ form.email }}
+	<div class="invalid-feedback">
+	  {{ form.email.errors.0 }}
+	</div>
+      </div>
+      <div class="mb-3">
+	{{ form.tel }}
+	<div class="invalid-feedback">
+	  {{ form.tel.errors.0 }}
+	</div>
+      </div>
+      <div class="mb-3">
+	<label for="exampleFormControlTextarea1" class="form-label">{{ form.comment.label }}</label>
+	{{ form.comment }}
+      </div>
+
+      <div class="d-grid gap-2">
+	<button class="btn btn-primary rounded-pill" type="submit">確認画面へ</button>
+	<button class="btn btn-secondary rounded-pill" type="button">戻る</button>
+      </div>
 
     </form>
 
