@@ -24,36 +24,37 @@
       <tbody>
 	<tr>
 	  <th scope="row">日時</th>
-	  <td>2022年01月01日（土）17時00分</td>
+	  <td>{{ form.reserve_date.value }} {{ form.reserve_time.value }}</td>
 	</tr>
 	<tr>
 	  <th scope="row">人数</th>
-	  <td>4名</td>
+	  <td>{{ form.reserve_num.value }} 名</td>
 	</tr>
 	<tr>
 	  <th scope="row">氏名</th>
-	  <td colspan="2">xxxxxx</td>
+	  <td colspan="2">{{ form.name.value }}</td>
 	</tr>
 	<tr>
 	  <th scope="row">メールアドレス</th>
-	  <td colspan="2">xxxx@xxx.xxx</td>
+	  <td colspan="2">{{ form.email.value }}</td>
 	</tr>
 	<tr>
 	  <th scope="row">電話番号</th>
-	  <td colspan="2">111-111-111</td>
+	  <td colspan="2">{{ form.tel.value }}</td>
 	</tr>
 	<tr>
 	  <th scope="row">備考</th>
-	  <td colspan="2">xxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br>
-	    xxxxxxxxxxxxxxxxxxxxxxxxxxxxx</td>
+	  <td colspan="2">{{ form.comment.value | linebreaksbr }}</td>
 	</tr>
       </tbody>
     </table>
 
+      <form method="POST" action"{% url 'reserve:complete' %}">{% csrf_token %}
     <div class="d-grid gap-2 mx-3">
-      <a class="btn btn-primary rounded-pill" href="{% url 'reserve:complete' %}">予約確定</a>
+	<button class="btn btn-primary rounded-pill" type="submit">予約確定</button>
       <a class="btn btn-secondary rounded-pill" href="{% url 'reserve:index' %}">戻る</a>
     </div>
+      </form>
 	    
     <!-- Optional JavaScript; choose one of the two! -->
 
