@@ -3,11 +3,14 @@ from django.shortcuts import render, redirect
 from .forms import ReserveForm
 
 def index(request):
-    if request.method == "POST":
+    if request.method == "GET":
+        # セッションに入力途中のデータがあればそれを使う
+        form = ReserveForm(request.session.get('form_data'))
+    else:
         form = ReserveForm(request.POST)
-        print(form.is_valid())
         if form.is_valid():
-            form.save()
+            request.session['form_data'] = request.POST
+            # form.save()
             return redirect('reserve:confirm')
         else:
             # commentフィールド以外で１つでも未記入のフィールドが存在していたら
@@ -22,8 +25,8 @@ def index(request):
                         # フォームに入力されているフィールド
                         # comment以外で入力されたフィールドはclass属性にis-validを追記する
                         form[field.name].field.widget.attrs['class'] += ' is-valid'
-    else:
-        form = ReserveForm()
+    #else:
+        #form = ReserveForm()
 
     return render(request, 'reserve/index.html', {'form':form})
 
