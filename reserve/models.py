@@ -13,11 +13,15 @@ class Shop(models.Model):
     reservable_date = models.DateField(verbose_name='予約可能日')
     start_time = models.TimeField(verbose_name='開店時間')
     end_time = models.TimeField(verbose_name='閉店時間')
-    max_reserve_num = models.IntegerField(verbose_name='１時間当たりの予約上限人数')
+    max_reserve_num = models.IntegerField(default=10, verbose_name='１時間当たりの予約上限人数')
 
     def __str__(self):
         return str(self.reservable_date)
-
+"""
+class ReservableDate(models.Model):
+    shop = models.ForeignKey(Shop, on_delete=models.CASCADE)
+    reservable_date = models.Date(verbose_name='予約可能時間')
+"""
 class Reserve(models.Model):
     """
     [予約情報テーブル]
@@ -91,7 +95,6 @@ class Reserve(models.Model):
             verbose_name='予約日',
             max_length=20,
             choices=choices_date,
-            unique=True,
     )
     # reserve_date = models.ForeignKey(Shop, on_delete=models.PROTECT, verbose_name='予約日')
 
@@ -99,7 +102,10 @@ class Reserve(models.Model):
             verbose_name='予約時間',
             max_length=10,
             choices=choices_time,
-            unique=True,
+            #unique=True,
+            #error_messages={
+            #    'unique':'この時間帯はご予約できません。',
+            #}
     )
     
     # reserve_time = models.ForeignKey(Shop, on_delete=models.CASCADE, verbose_name='予約時間')
@@ -107,10 +113,16 @@ class Reserve(models.Model):
             verbose_name='予約人数',
             # max_length=10,
             choices=choices_num,
-            unique=True,
     )
     name = models.CharField(verbose_name='氏名', max_length=20)
-    email = models.EmailField(verbose_name='メールアドレス', max_length=100, unique=True)
+    email = models.EmailField(
+            verbose_name='メールアドレス',
+            max_length=100,
+            unique=True,
+            error_messages={
+                'unique':'こちらのメールアドレスで既にご予約がされています。',
+            }
+    )
     # RegexValidatorを使用すると正規表現でバリデーションをかけることができる
     num_regex = RegexValidator(
             regex=r'^0[789]0-\d{4}-\d{4}',
@@ -121,6 +133,9 @@ class Reserve(models.Model):
             max_length=20,
             validators=[num_regex],
             unique=True,
+            error_messages={
+                'unique':'こちらの電話番号で既にご予約がされています。',
+            }
     )
     comment = models.TextField(
             null=True, # DB内にNULLとして空の値を保持する
