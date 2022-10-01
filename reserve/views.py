@@ -30,15 +30,33 @@ def index(request):
 
 def confirm(request):
     """予約確認画面"""
+    from django.utils import timezone
     # sessionに保持されているデータを取得
     session_form_data = request.session.get('form_data')
+
     if session_form_data is None: # sessionデータが空であれば入力ページにリダイレクトされる
         return redirect('reserve:index')
-    form = ReserveForm(session_form_data)
+    """
+    reserve_dateとreserve_timeのsession変数はstr型となって格納されるため
+    ここではdatetimeモジュールを使用してdatetime型へ変換する。
+    よってテンプレートフィルタで「date」フィルタが使えるようになる
+    """
+    session_form_data['reserve_date'] = timezone.datetime.strptime(
+            session_form_data['reserve_date'],
+            '%Y-%m-%d'
+    ).date()
+    session_form_data['reserve_time'] = timezone.datetime.strptime(
+            session_form_data['reserve_time'],
+            '%H:%M:%S'
+    ).time()
+
     if request.method == "POST":
-        form.save()
-        return redirect('reserve:complete')
-    return render(request, 'reserve/confirm.html', {'form': form})
+        form = ReserveForm(session_form_data)
+        if form.is_valid():
+            form.save()
+            return redirect('reserve:complete')
+        print(form.errors)
+    return render(request, 'reserve/confirm.html', {'session_form_data': session_form_data })
 
 def complete(request):
     """予約完了画面"""

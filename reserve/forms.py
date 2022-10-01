@@ -1,11 +1,10 @@
 from django import forms
 
-from .models import Reserve
+from .models import Reserve, Shop
+
 
 class ReserveForm(forms.ModelForm):
-    """
-    予約フォームの自作
-    """
+    """予約フォームの自作"""
 
     class Meta:
         """
