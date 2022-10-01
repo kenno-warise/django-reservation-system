@@ -24,27 +24,27 @@
       <tbody>
 	<tr>
 	  <th scope="row">日時</th>
-	  <td>{{ form.reserve_date.value }} {{ form.reserve_time.value }}</td>
+	  <td>{{ session_form_data.reserve_date | date:"n/j (l)" | cut:"曜日" }} {{ session_form_data.reserve_time }}</td>
 	</tr>
 	<tr>
 	  <th scope="row">人数</th>
-	  <td>{{ form.reserve_num.value }} 名</td>
+	  <td>{{ session_form_data.reserve_num }} 名</td>
 	</tr>
 	<tr>
 	  <th scope="row">氏名</th>
-	  <td colspan="2">{{ form.name.value }}</td>
+	  <td colspan="2">{{ session_form_data.name }}</td>
 	</tr>
 	<tr>
 	  <th scope="row">メールアドレス</th>
-	  <td colspan="2">{{ form.email.value }}</td>
+	  <td colspan="2">{{ session_form_data.email }}</td>
 	</tr>
 	<tr>
 	  <th scope="row">電話番号</th>
-	  <td colspan="2">{{ form.tel.value }}</td>
+	  <td colspan="2">{{ session_form_data.tel }}</td>
 	</tr>
 	<tr>
 	  <th scope="row">備考</th>
-	  <td colspan="2">{{ form.comment.value | linebreaksbr }}</td>
+	  <td colspan="2">{{ session_form_data.comment | linebreaksbr }}</td>
 	</tr>
       </tbody>
     </table>

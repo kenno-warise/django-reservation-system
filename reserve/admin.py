@@ -2,6 +2,7 @@ from django.contrib import admin
 
 from .models import Reserve, Shop
 
+
 class ReserveAdmin(admin.ModelAdmin):
     """
     [チェンジリストのカスタマイズ]
@@ -10,7 +11,7 @@ class ReserveAdmin(admin.ModelAdmin):
     search_fields
     """
     list_display = ('reserve_date', 'reserve_time', 'name', 'reserve_num', 'email', 'tel', 'comment') # チェンジリストに表示するフィールド
-    list_filter = ['reserve_date'] # 日付に対してフィルター（絞り込む）を掛けられる
+    # list_filter = ['reserve_date'] # 日付に対してフィルター（絞り込む）を掛けられる
     search_fields = ['reserve_date'] # 日付を指定して検索（検索ボックスの追加）
 
 class ShopAdmin(admin.ModelAdmin):
@@ -25,7 +26,7 @@ class ShopAdmin(admin.ModelAdmin):
             )}),
     ]
 
-admin.site.register(Reserve, ReserveAdmin)
 admin.site.register(Shop, ShopAdmin)
+admin.site.register(Reserve, ReserveAdmin)
 
 # Register your models here.
