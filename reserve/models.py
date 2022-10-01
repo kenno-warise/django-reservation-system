@@ -16,7 +16,7 @@ class Shop(models.Model):
     max_reserve_num = models.IntegerField(default=10, verbose_name='１時間当たりの予約上限人数')
 
     def __str__(self):
-        return str(self.reservable_date)
+        return 'Shopの編集'
 """
 class ReservableDate(models.Model):
     shop = models.ForeignKey(Shop, on_delete=models.CASCADE)
@@ -143,9 +143,9 @@ class Reserve(models.Model):
             verbose_name='備考欄',
             max_length=1000,
     )
-    """
+    
     def __str__(self):
-        return str(self.reserve_date)
-    """
+        return 'Reserveの編集'
+    
 
 # Create your models here.

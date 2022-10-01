@@ -17,8 +17,10 @@ class ReserveAdmin(admin.ModelAdmin):
 class ShopAdmin(admin.ModelAdmin):
     """
     [チェンジフォームのカスタマイズ]
+    list_display
     fieldsets
     """
+    list_display = ('start_time', 'end_time', 'max_reserve_num')
     fieldsets = [
             (None, {
                 'fields': (

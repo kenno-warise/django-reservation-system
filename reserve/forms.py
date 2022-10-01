@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Reserve, Shop
+from .models import Reserve
 
 
 class ReserveForm(forms.ModelForm):
