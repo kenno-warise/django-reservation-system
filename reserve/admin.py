@@ -20,10 +20,13 @@ class ShopAdmin(admin.ModelAdmin):
     fieldsets
     """
     fieldsets = [
-            (None, {'fields': ('reservable_date',
-                ('start_time', 'end_time'),
-                'max_reserve_num',
-            )}),
+            (None, {
+                'fields': (
+                    'reservable_date',
+                    ('start_time', 'end_time'),
+                    'max_reserve_num',
+                )
+            }),
     ]
 
 admin.site.register(Shop, ShopAdmin)
