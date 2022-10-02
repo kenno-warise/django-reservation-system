@@ -10,18 +10,21 @@ class Shop(models.Model):
     営業終了:end_time
     予約上限人数:max_reserve_num
     """
-    reservable_date = models.DateField(verbose_name='予約可能日')
+    # reservable_date = models.DateField(verbose_name='予約可能日')
     start_time = models.TimeField(verbose_name='開店時間')
     end_time = models.TimeField(verbose_name='閉店時間')
     max_reserve_num = models.IntegerField(default=10, verbose_name='１時間当たりの予約上限人数')
 
     def __str__(self):
         return 'Shopの編集'
-"""
+
 class ReservableDate(models.Model):
     shop = models.ForeignKey(Shop, on_delete=models.CASCADE)
-    reservable_date = models.Date(verbose_name='予約可能時間')
-"""
+    reservable_date = models.DateField(verbose_name='予約可能時間')
+
+    def __str__(self):
+        return '予約可能時間'
+
 class Reserve(models.Model):
     """
     [予約情報テーブル]
@@ -41,8 +44,8 @@ class Reserve(models.Model):
     # 予約日
     reserve_date_tup = ('', '予約日')
     try: # djangoDBのテーブルエラー回避のためのtry文
-        if Shop.objects.all():
-            shop_querys = Shop.objects.values_list('reservable_date')
+        if ReservableDate.objects.all():
+            shop_querys = ReservableDate.objects.values_list('reservable_date')
             shop_data_list = [(query[0], query[0]) for query in shop_querys]
         else:
             shop_data_list = []
