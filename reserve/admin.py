@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Reserve, Shop
+from .models import Reserve, Shop, ReservableDate
 
 
 class ReserveAdmin(admin.ModelAdmin):
@@ -14,17 +14,21 @@ class ReserveAdmin(admin.ModelAdmin):
     # list_filter = ['reserve_date'] # 日付に対してフィルター（絞り込む）を掛けられる
     search_fields = ['reserve_date'] # 日付を指定して検索（検索ボックスの追加）
 
+class ReservableInline(admin.TabularInline):
+    model = ReservableDate
+    extra = 7
+
 class ShopAdmin(admin.ModelAdmin):
     """
     [チェンジフォームのカスタマイズ]
     list_display
     fieldsets
     """
+    inlines = [ReservableInline]
     list_display = ('start_time', 'end_time', 'max_reserve_num')
     fieldsets = [
             (None, {
                 'fields': (
-                    'reservable_date',
                     ('start_time', 'end_time'),
                     'max_reserve_num',
                 )
