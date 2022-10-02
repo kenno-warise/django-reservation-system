@@ -49,7 +49,7 @@ class Reserve(models.Model):
     except:
         shop_data_list = []
     if not shop_data_list:
-        datenow = timezone.now().date()
+        datenow = timezone.datetime(2022, 9, 28).date()
         for i in range(7):
             date = datenow + timezone.timedelta(days=i)
             shop_data_list.append((date, date))
