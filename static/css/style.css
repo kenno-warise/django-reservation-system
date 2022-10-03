@@ -45,3 +45,10 @@ header {
   color: green;
 }
 
+.navbar-brand {
+  font-size: 1rem;
+}
+
+.nav-icon {
+  font-size: 1.4rem;
+}
