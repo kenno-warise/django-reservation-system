@@ -62,4 +62,12 @@ def complete(request):
     """予約完了画面"""
     return render(request, 'reserve/complete.html')
 
+def reserve_list(request):
+    """予約リスト画面"""
+    return render(request, 'reserve/reserve_list.html')
+
+def setting(request):
+    """設定画面"""
+    return render(request, 'reserve/setting.html')
+
 # Create your views here.
