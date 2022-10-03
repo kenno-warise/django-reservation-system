@@ -133,5 +133,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # ログイン認証
 
-LOGIN_URL = 'login'
-LOGIN_REDIRECT_URL = 'reserve_list'
+LOGIN_URL = 'reserve:login'
+LOGIN_REDIRECT_URL = 'reserve:reserve_list'
