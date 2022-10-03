@@ -1,8 +1,37 @@
 from django import forms
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 
 from .models import Reserve
 
+class LoginForm(AuthenticationForm):
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
+            field.widget.attrs['placeholder'] = field.label
+    
+    """
+    class Meta:
+        model = User
+        fields = ['username', 'password']
+        widgets = {
+                'username': forms.Select(attrs={
+                    'class': 'form-control',
+                    'name': 'username',
+                    'placeholder': 'ID',
+                    'type': 'text',
+                }),
+                'password': forms.Select(attrs={
+                    'class': 'form-control',
+                    'name': 'password',
+                    'placeholder': 'PASSWORD',
+                    'type': 'password',
+                }),
+        }
+    """
 class ReserveForm(forms.ModelForm):
     """予約フォームの自作"""
 

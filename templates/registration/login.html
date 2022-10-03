@@ -26,10 +26,12 @@
     <form class="card text-center" method="post" action="{% url 'reserve:reserve_list' %}">{% csrf_token %}
       <div class="card-body">
 	<div class="mb-3">
-	  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="ID">
+	  <!--<input type="text" class="form-control" id="exampleFormControlInput1" placeholder="ID">-->
+	  {{ form.username }}
 	</div>
 	<div class="mb-3">
-	  <input type="PASSWORD" class="form-control" id="exampleFormControlInput1" placeholder="PASSWORD">
+	  <!--<input type="PASSWORD" class="form-control" id="exampleFormControlInput1" placeholder="PASSWORD">-->
+	  {{ form.password }}
 	</div>
 	<div class="d-grid gap-2 my-3">
 	  <button class="btn btn-primary rounded-pill" type="submit">ログイン</button>

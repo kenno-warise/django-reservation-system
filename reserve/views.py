@@ -1,6 +1,8 @@
+from django.contrib.auth import login
+from django.contrib.auth.views import LoginView
 from django.shortcuts import render, redirect
 
-from .forms import ReserveForm
+from .forms import ReserveForm, LoginForm
 
 def index(request):
     """予約画面"""
@@ -61,6 +63,11 @@ def confirm(request):
 def complete(request):
     """予約完了画面"""
     return render(request, 'reserve/complete.html')
+
+class Login(LoginView):
+    """ログイン画面"""
+    form_class = LoginForm
+    # template_name = 'reserve/login.html'
 
 def reserve_list(request):
     """予約リスト画面"""
