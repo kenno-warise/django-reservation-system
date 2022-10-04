@@ -135,3 +135,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_URL = 'reserve:login'
 LOGIN_REDIRECT_URL = 'reserve:reserve_list'
+LOGOUT_REDIRECT_URL = 'reserve:index'
