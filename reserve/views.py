@@ -1,8 +1,10 @@
 from django.contrib.auth import login
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import LoginView, LogoutView
 from django.shortcuts import render, redirect
 
 from .forms import ReserveForm, LoginForm
+from .models import Reserve
 
 def index(request):
     """予約画面"""
@@ -67,11 +69,16 @@ def complete(request):
 class Login(LoginView):
     """ログイン画面"""
     form_class = LoginForm
-    # template_name = 'reserve/login.html'
+    template_name = 'reserve/login.html'
 
+class Logout(LogoutView):
+    """ログアウト"""
+
+@login_required
 def reserve_list(request):
     """予約リスト画面"""
-    return render(request, 'reserve/reserve_list.html')
+    reserves = Reserve.objects.all()
+    return render(request, 'reserve/reserve_list.html', {'reserves': reserves})
 
 def setting(request):
     """設定画面"""

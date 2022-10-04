@@ -23,9 +23,15 @@
     <header class="navbar">
       <div class="container-fluid">
 	<div class="navbar-brand">SAMPLE SHOP</div>
+	<ul class="navbar-nav me-auto mx-3 mb-lg-0">
+	  <li class="nav-item">
+	    {{ user.username }}
+	  </li>
+	</ul>
 	<form class="d-flex">
 	  <a href="{% url 'reserve:reserve_list' %}" class="mx-3"><i class="bi bi-list-task nav-icon"></i></a>
-	  <a href="{% url 'reserve:setting' %}"><i class="bi bi-gear nav-icon"></i></a>
+	  <a href="{% url 'reserve:setting' %}" class="mx-3"><i class="bi bi-gear nav-icon"></i></a>
+	  <a href="{% url 'reserve:logout' %}" class="mx-3"><i class="bi bi-door-closed nav-icon"></i></a>
 	</form>
       </div>
     </header>
@@ -53,30 +59,16 @@
 
     <table class="table">
       <tbody>
+	{% for reserve in reserves %}
 	<tr>
-	  <td>1/1(土)</td>
-	  <td>12:00</td>
-	  <td>テスト太郎　4名<br>
-	    xxx@xxx.xxx<br>
-	    111-1111-1111<br>
-	    概要欄に記載された文面......</td>
+	  <td>{{ reserve.reserve_date | date:"n/j (l)" | cut:"曜日" }}</td>
+	  <td>{{ reserve.reserve_time }}</td>
+	  <td>{{ reserve.name}}　{{ reserve.reserve_num }}<br>
+	    {{ reserve.email }}<br>
+	    {{ reserve.tel }}<br>
+            {{ reserve.comments }}</td>
 	</tr>
-	<tr>
-	  <td>1/1(土)</td>
-	  <td>12:00</td>
-	  <td>テスト太郎　4名<br>
-	    xxx@xxx.xxx<br>
-	    111-1111-1111<br>
-	    概要欄に記載された文面......</td>
-	</tr>
-	<tr>
-	  <td>1/1(土)</td>
-	  <td>12:00</td>
-	  <td>テスト太郎　4名<br>
-	    xxx@xxx.xxx<br>
-	    111-1111-1111<br>
-	    概要欄に記載された文面......</td>
-	</tr>
+	{% endfor %}
       </tbody>
     </table>
 
