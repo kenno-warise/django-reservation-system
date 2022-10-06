@@ -43,6 +43,9 @@
 	<div class="mb-3">
 	  <label for="exampleFormControlInput1" class="form-label">予約可能日</label>
 	  {{ form.reservable_date }}
+	  <div class="invalid-feedback">
+	    {{ form.reservable_date.errors.0 }}
+	  </div>
 	  <!--
      <select class="form-select" aria-label="Default select example">
      <option selected>0日前</option>
@@ -57,6 +60,9 @@
 	  <div class="row">
 	    <div class="col-5">
 	      {{ form.start_time }}
+	      <div class="invalid-feedback">
+		{{ form.start_time.errors.0 }}
+	      </div>
 	      <!--
 	 <select class="form-select" aria-label="Default select example">
 	 <option selected>12:00</option>
@@ -71,6 +77,9 @@
 	    </div>
 	    <div class="col-5">
 	      {{ form.end_time }}
+	      <div class="invalid-feedback">
+		{{ form.end_time.errors.0 }}
+	      </div>
 	      <!--
 	 <select class="form-select" aria-label="Default select example">
 	 <option selected>15:00</option>
@@ -86,6 +95,9 @@
 	  <div class="mb-3">
 	    <label for="exampleFormControlInput1" class="form-label">1時間当たりの予約上限人数</label>
 	    {{ form.max_reserve_num }}
+	    <div class="invalid-feedback">
+	      {{ form.max_reserve_num.errors.0 }}
+	    </div>
 	    <!--
        <select class="form-select" aria-label="Default select example">
        <option selected>1人</option>
