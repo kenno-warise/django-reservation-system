@@ -63,6 +63,10 @@ def confirm(request):
 
 def complete(request):
     """予約完了画面"""
+    """
+    session変数に保持されている予約データを空にする
+    """
+    request.session.pop('form_data', None)
     return render(request, 'reserve/complete.html')
 
 class Login(LoginView):
