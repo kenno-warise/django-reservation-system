@@ -25,12 +25,16 @@
 	<div class="navbar-brand">SAMPLE SHOP</div>
 	<ul class="navbar-nav me-auto mx-3 mb-lg-0">
 	  <li class="nav-item">
-	    {{ user.username }}
+	    <a href="{% url 'admin:index' %}">{{ user.username }}</a>
 	  </li>
 	</ul>
 	<form class="d-flex">
 	  <a href="{% url 'reserve:reserve_list' %}" class="mx-3"><i class="bi bi-list-task nav-icon"></i></a>
-	  <a href="{% url 'reserve:setting' %}" class="mx-3"><i class="bi bi-gear nav-icon"></i></a>
+	  {% if shop_id %}
+	  <a href="{% url 'reserve:setting' shop_id %}" class="mx-3"><i class="bi bi-gear nav-icon"></i></a>
+	  {% else %}
+	  <a href="{% url 'admin:reserve_shop_add' %}" class="mx-3"><i class="bi bi-gear nav-icon"></i></a>
+	  {% endif %}
 	  <a href="{% url 'reserve:logout' %}" class="mx-3"><i class="bi bi-door-closed nav-icon"></i></a>
 	</form>
       </div>

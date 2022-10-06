@@ -23,59 +23,77 @@
     <header class="navbar">
       <div class="container-fluid">
 	<div class="navbar-brand">SAMPLE SHOP</div>
+	<ul class="navbar-nav me-auto mx-3 mb-lg-0">
+	  <li class="nav-item">
+	    <a href="{% url 'admin:index' %}">{{ user.username }}</a>
+	  </li>
+	</ul>
 	<form class="d-flex">
 	  <a href="{% url 'reserve:reserve_list' %}" class="mx-3"><i class="bi bi-list-task nav-icon"></i></a>
-	  <a href="{% url 'reserve:setting' %}"><i class="bi bi-gear nav-icon"></i></a>
+	  <a href="{% url 'reserve:setting' shop_404.id %}" class="mx-3"><i class="bi bi-gear nav-icon"></i></a>
+	  <a href="{% url 'reserve:logout' %}" class="mx-3"><i class="bi bi-door-closed nav-icon"></i></a>
 	</form>
       </div>
     </header>
 
     <h1>設定</h1>
 
-    <form class="card" method="post">{% csrf_token %}
+    <form class="card" method="post" action="{% url 'reserve:setting' shop_404.id %}" novalidate>{% csrf_token %}
       <div class="card-body">
 	<div class="mb-3">
 	  <label for="exampleFormControlInput1" class="form-label">予約可能日</label>
-	  <select class="form-select" aria-label="Default select example">
-	    <option selected>0日前</option>
-	    <option value="1">One</option>
-	    <option value="2">Two</option>
-	    <option value="3">Three</option>
-	  </select>
+	  {{ form.reservable_date }}
+	  <!--
+     <select class="form-select" aria-label="Default select example">
+     <option selected>0日前</option>
+     <option value="1">One</option>
+     <option value="2">Two</option>
+     <option value="3">Three</option>
+     </select>
+	  -->
 	</div>
 	<div class="mb-3">
 	  <label for="exampleFormControlInput1" class="form-label">営業時間（予約可能時間）</label>
 	  <div class="row">
 	    <div class="col-5">
-	      <select class="form-select" aria-label="Default select example">
-		<option selected>00:00</option>
-		<option value="1">One</option>
-		<option value="2">Two</option>
-		<option value="3">Three</option>
-	      </select>
+	      {{ form.start_time }}
+	      <!--
+	 <select class="form-select" aria-label="Default select example">
+	 <option selected>12:00</option>
+	 <option value="1">One</option>
+	 <option value="2">Two</option>
+	 <option value="3">Three</option>
+	 </select>
+	      -->
 	    </div>
 	    <div class="col-2 text-center pt-2">
 	      〜
 	    </div>
 	    <div class="col-5">
-	      <select class="form-select" aria-label="Default select example">
-		<option selected>00:00</option>
-		<option value="1">One</option>
-		<option value="2">Two</option>
-		<option value="3">Three</option>
-	      </select>
+	      {{ form.end_time }}
+	      <!--
+	 <select class="form-select" aria-label="Default select example">
+	 <option selected>15:00</option>
+	 <option value="1">One</option>
+	 <option value="2">Two</option>
+	 <option value="3">Three</option>
+	 </select>
+	      -->
 	    </div>
 	  </div>
 	</div>
 	<div class="d-grid gap-2 my-3">
 	  <div class="mb-3">
 	    <label for="exampleFormControlInput1" class="form-label">1時間当たりの予約上限人数</label>
-	    <select class="form-select" aria-label="Default select example">
-	      <option selected>1人</option>
-	      <option value="1">One</option>
-	      <option value="2">Two</option>
-	      <option value="3">Three</option>
-	    </select>
+	    {{ form.max_reserve_num }}
+	    <!--
+       <select class="form-select" aria-label="Default select example">
+       <option selected>1人</option>
+       <option value="1">One</option>
+       <option value="2">Two</option>
+       <option value="3">Three</option>
+       </select>
+	    -->
 	  </div>
 	  <button class="btn btn-primary rounded-pill" type="submit">登録</button>
 	</div>
