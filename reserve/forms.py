@@ -3,35 +3,23 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
 
-from .models import Reserve
+from .models import Reserve, Shop
 
 class LoginForm(AuthenticationForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields['username'].widget.attrs['class'] = 'form-control'
+        self.fields['username'].widget.attrs['placeholder'] = 'ID'
+        self.fields['password'].widget.attrs['class'] = 'form-control'
+        self.fields['password'].widget.attrs['placeholder'] = 'PASSWORD'
+        """
+        イテレーションで各css属性を取得
         for field in self.fields.values():
             field.widget.attrs['class'] = 'form-control'
             field.widget.attrs['placeholder'] = field.label
-    
-    """
-    class Meta:
-        model = User
-        fields = ['username', 'password']
-        widgets = {
-                'username': forms.Select(attrs={
-                    'class': 'form-control',
-                    'name': 'username',
-                    'placeholder': 'ID',
-                    'type': 'text',
-                }),
-                'password': forms.Select(attrs={
-                    'class': 'form-control',
-                    'name': 'password',
-                    'placeholder': 'PASSWORD',
-                    'type': 'password',
-                }),
-        }
-    """
+        """
+
 class ReserveForm(forms.ModelForm):
     """予約フォームの自作"""
 
@@ -119,3 +107,49 @@ class ReserveForm(forms.ModelForm):
             raise forms.ValidationError("0000-0000-0000のように正しく入力してください。")
         return None
     """
+
+
+class ShopForm(forms.ModelForm):
+    """設定フォームの自作"""
+
+    class Meta:
+        model = Shop
+        fields = ('reservable_date', 'start_time', 'end_time', 'max_reserve_num')
+        widgets = {
+                'reservable_date': forms.Select(attrs={
+                    'class': 'form-select',
+                    'name': 'reservable_date',
+                    'placeholder': '予約可能日',
+                }),
+                'start_time': forms.Select(attrs={
+                    'class': 'form-select',
+                    'name': 'start_time',
+                    'placeholder': '開始時間',
+                }),
+                'end_time': forms.Select(attrs={
+                    'class': 'form-select',
+                    'name': 'end_time',
+                    'placeholder': '終了時間',
+                }),
+                'max_reserve_num': forms.Select(attrs={
+                    'class': 'form-select',
+                    'name': 'max_reserve_num',
+                    'placeholder': '上限人数',
+                }),
+        }
+        # バリデーションエラーメッセージ
+        error_messages = {
+                "reserve_date": {
+                    "required": "予約日を選択してください！",
+                },
+                "start_time": {
+                    "required": "選択してください",
+                },
+                "end_time": {
+                    "required": "選択してください",
+                },
+                "max_reserve_num": {
+                    "required": "選択してください",
+                },
+        }
+

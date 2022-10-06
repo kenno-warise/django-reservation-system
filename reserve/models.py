@@ -2,6 +2,41 @@ from django.core.validators import RegexValidator
 from django.db import models
 from django.utils import timezone
 
+
+class SetIntegration(models.Model):
+    set_name = models.CharField(max_length=20, verbose_name='設定ネーム')
+
+    def __str__(self):
+        return self.set_name
+
+class ReservableDate(models.Model):
+    name = models.ForeignKey(SetIntegration, verbose_name='設定ネーム', on_delete=models.CASCADE)
+    reservable_date = models.CharField(max_length=10, verbose_name='予約可能時間')
+
+    def __str__(self):
+        return self.reservable_date
+
+class StartTime(models.Model):
+    name = models.ForeignKey(SetIntegration, verbose_name='設定ネーム', on_delete=models.CASCADE)
+    start_time = models.TimeField(verbose_name='開始時間')
+
+    def __str__(self):
+        return str(self.start_time)
+
+class EndTime(models.Model):
+    name = models.ForeignKey(SetIntegration, verbose_name='設定ネーム', on_delete=models.CASCADE)
+    end_time = models.TimeField(verbose_name='終了時間')
+
+    def __str__(self):
+        return str(self.end_time)
+
+class MaxReserveNum(models.Model):
+    name = models.ForeignKey(SetIntegration, verbose_name='設定ネーム', on_delete=models.CASCADE)
+    max_reserve_num = models.IntegerField(verbose_name='予約上限人数')
+
+    def __str__(self):
+        return str(self.max_reserve_num)
+
 class Shop(models.Model):
     """
     [店舗情報テーブル]
@@ -9,21 +44,19 @@ class Shop(models.Model):
     営業開始:start_time
     営業終了:end_time
     予約上限人数:max_reserve_num
+
+    メモ：
+    ForeignKeyを使っている理由は、データを保存する際にプルダウンで取得できるようにする必要があったため
+    他の方法は、CharFieldでchoicesを設定しようと思ったが、ソースを変更する必要があるため辞めた
     """
-    # reservable_date = models.DateField(verbose_name='予約可能日')
-    start_time = models.TimeField(verbose_name='開店時間')
-    end_time = models.TimeField(verbose_name='閉店時間')
-    max_reserve_num = models.IntegerField(default=10, verbose_name='１時間当たりの予約上限人数')
+    reservable_date = models.ForeignKey(ReservableDate, verbose_name='予約可能日', on_delete=models.CASCADE)
+    start_time = models.ForeignKey(StartTime, verbose_name='開店時間', on_delete=models.CASCADE)
+    end_time = models.ForeignKey(EndTime, verbose_name='閉店時間', on_delete=models.CASCADE)
+    max_reserve_num = models.ForeignKey(MaxReserveNum, verbose_name='１時間当たりの予約上限人数', on_delete=models.CASCADE)
 
     def __str__(self):
         return 'Shopの編集'
 
-class ReservableDate(models.Model):
-    shop = models.ForeignKey(Shop, on_delete=models.CASCADE)
-    reservable_date = models.DateField(verbose_name='予約可能時間')
-
-    def __str__(self):
-        return '予約可能時間'
 
 class Reserve(models.Model):
     """
@@ -43,19 +76,11 @@ class Reserve(models.Model):
     """
     # 予約日
     reserve_date_tup = ('', '予約日')
-    try: # djangoDBのテーブルエラー回避のためのtry文
-        if ReservableDate.objects.all():
-            shop_querys = ReservableDate.objects.values_list('reservable_date')
-            shop_data_list = [(query[0], query[0]) for query in shop_querys]
-        else:
-            shop_data_list = []
-    except:
-        shop_data_list = []
-    if not shop_data_list:
-        datenow = timezone.datetime(2022, 9, 28).date()
-        for i in range(7):
-            date = datenow + timezone.timedelta(days=i)
-            shop_data_list.append((date, date))
+    shop_data_list = []
+    datenow = timezone.datetime(2022, 9, 28).date()
+    for i in range(7):
+        date = datenow + timezone.timedelta(days=i)
+        shop_data_list.append((date, date))
     shop_data_list.insert(0, reserve_date_tup)
     choices_date = tuple(shop_data_list)
 

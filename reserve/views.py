@@ -1,10 +1,9 @@
-from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView, LogoutView
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 
-from .forms import ReserveForm, LoginForm
-from .models import Reserve
+from .forms import ReserveForm, LoginForm, ShopForm
+from .models import Reserve, Shop
 
 def index(request):
     """予約画面"""
@@ -78,10 +77,46 @@ class Logout(LogoutView):
 def reserve_list(request):
     """予約リスト画面"""
     reserves = Reserve.objects.all()
-    return render(request, 'reserve/reserve_list.html', {'reserves': reserves})
+    if Shop.objects.exists(): # クエリセットの存在チェック
+        shop_id = Shop.objects.values('id').get()['id']
+    else:
+        shop_id = None
+    context = {
+            'reserves': reserves,
+            'shop_id': shop_id,
+    }
+    return render(request, 'reserve/reserve_list.html', context)
 
-def setting(request):
+@login_required
+def setting(request, id):
     """設定画面"""
-    return render(request, 'reserve/setting.html')
+
+    shop_404 = get_object_or_404(Shop, id=id)
+    if request.method == "POST":
+        form = ShopForm(request.POST, instance=shop_404)
+        if form.is_valid():
+            form.save()
+            return redirect('reserve:index')
+        else: # 検証に失敗したら
+            # １つでも未記入のフィールドが存在していたら
+            # 各フィールドのclass属性にis-invalid（失敗）もしくわis-valid（クリア）を追記する
+            for field in form:
+                if field.errors:
+                    # フォームが未入力のフィールド
+                    # 入力されていないフィールドはclass属性にis-invalidを追記する
+                    form[field.name].field.widget.attrs['class'] += ' is-invalid'
+                else:
+                    # フォームに入力されているフィールド
+                    # 入力されたフィールドはclass属性にis-validを追記する
+                    form[field.name].field.widget.attrs['class'] += ' is-valid'
+    else:
+        form = ShopForm(instance=shop_404)
+
+    context = {
+            'form': form,
+            'shop_404': shop_404,
+    }
+    return render(request, 'reserve/setting.html', context)
+
 
 # Create your views here.
