@@ -153,3 +153,34 @@ class ShopForm(forms.ModelForm):
                 },
         }
 
+class EveryYearForm(forms.Form):
+    """
+    予約リスト画面のプルダウンで使うデータを取得
+    """
+    year_and_month = Reserve.objects.values_list('reserve_date')
+
+    # choiece用の年を取得
+    year_list = [t[0].year for t in year_and_month]
+    year_unique = list(set(year_list))
+    year_list_tuple = [(str(y), str(y)+'年') for y in year_unique]
+    # year_list = [('2022', '2022年'), ('2023', '2023年')]
+    
+    # choiece用の月を取得
+    month_list = [t[0].month for t in year_and_month]
+    # ↓setのみだと並びがランダムになってしまうので、sortedで並びを保持する
+    month_unique = list(sorted(set(month_list), key=month_list.index))
+    month_list_tuple = [(str(y), str(y)+'月') for y in month_unique]
+    print(month_list_tuple)
+    # month_list = [('9', '9月'), ('10', '10月')]
+
+    years = tuple(year_list_tuple)
+    months = tuple(month_list_tuple)
+
+    year_pulldown = forms.ChoiceField(
+            choices=years,
+            widget=forms.widgets.Select(attrs={'class': 'form-select'}),
+    )
+    month_pulldown = forms.ChoiceField(
+            choices=months,
+            widget=forms.widgets.Select(attrs={'class': 'form-select'}),
+    )
