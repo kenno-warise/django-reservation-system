@@ -78,7 +78,8 @@ class Reserve(models.Model):
     reserve_date_tup = ('', '予約日')
     shop_data_list = []
     datenow = timezone.datetime(2022, 9, 28).date()
-    for i in range(7):
+    # for i in range(7):
+    for i in range(1, 730, 30):
         date = datenow + timezone.timedelta(days=i)
         shop_data_list.append((date, date))
     shop_data_list.insert(0, reserve_date_tup)

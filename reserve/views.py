@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView, LogoutView
 from django.shortcuts import render, redirect, get_object_or_404
 
-from .forms import ReserveForm, LoginForm, ShopForm
+from .forms import ReserveForm, LoginForm, ShopForm, EveryYearForm
 from .models import Reserve, Shop
 
 def index(request):
@@ -80,14 +80,24 @@ class Logout(LogoutView):
 @login_required
 def reserve_list(request):
     """予約リスト画面"""
-    reserves = Reserve.objects.all()
+    """
+    プルダウンの初期値は絞り込みで表示する
+    """
     if Shop.objects.exists(): # クエリセットの存在チェック
         shop_id = Shop.objects.values('id').get()['id']
     else:
         shop_id = None
+    form = EveryYearForm()
+    reserves = Reserve.objects.filter( # 予約リストでデフォルト表示されるデータをフィルタリング
+            reserve_date__year=form.years[0][0],
+            reserve_date__month=form.months[0][0],
+    )
+    print(form.years)
+    print(form.months)
     context = {
             'reserves': reserves,
             'shop_id': shop_id,
+            'form': form,
     }
     return render(request, 'reserve/reserve_list.html', context)
 
