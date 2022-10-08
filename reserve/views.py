@@ -1,17 +1,85 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView, LogoutView
 from django.shortcuts import render, redirect, get_object_or_404
+from django.utils import timezone
 
-from .forms import ReserveForm, LoginForm, ShopForm, EveryYearForm
+from .forms import ReserveForm, ReserveForm_2, LoginForm, ShopForm, EveryYearForm
 from .models import Reserve, Shop
 
 def index(request):
     """予約画面"""
     if request.method == "GET":
-        # セッションに入力途中のデータがあればそれを使う
-        form = ReserveForm(request.session.get('form_data'))
+        if request.session.get('form_data') is None:
+            form = ReserveForm_2()
+            # 予約日
+            """
+            設定機能で設定された予約可能日考慮
+            """
+            reserve_date_tup = ('', '予約日')
+            reservable_range_list = []
+        
+            if Shop.objects.exists():
+                # ここで「〇日前」というデータを取得
+                shop_query = Shop.objects.select_related('reservable_date')[0].reservable_date.reservable_date
+                # 余計な文字列を取り除き、int型に変換
+                shop_query_int = int(shop_query.replace('日前', ''))
+                # 現在から「〇日後」のdatetimeを取得
+                one_day_later = timezone.now().date() + timezone.timedelta(days=shop_query_int)
+                # 予約可能範囲として〇日後から約１ヵ月先の予約が可能
+                for r in range(32):
+                    date = one_day_later + timezone.timedelta(days=r)
+                    reservable_range_list.append((date, date))
+            else: # Shopテーブルにデータが存在しない場合
+                now_date = timezone.now().date()
+                for i in range(1, 31):
+                    date = now_date + timezone.timedelta(days=i)
+                    reservable_range_list.append((date, date))
+            reservable_range_list.insert(0, reserve_date_tup)
+            choices_date = tuple(reservable_range_list)
+            # 予約人数
+            reserve_num_tup = ('', '予約人数')
+            if Shop.objects.exists():
+                # ForignKey先のデータを取得し予約画面で表示
+                shop_querys = Shop.objects.select_related('max_reserve_num')[0].max_reserve_num.max_reserve_num
+                shop_querys = range(1, shop_querys+1)
+                num_data_list = [(query, query) for query in shop_querys]
+            else:
+                num_data_list = []
+                for i in range(1, 5):
+                    num_data_list.append((i, i))
+            num_data_list.insert(0, reserve_num_tup)
+            choices_num = tuple(num_data_list)
+            
+            # 予約時間
+            """
+            1時間当たりの予約時間考慮する
+            """
+            reserve_time_tup = ('', '予約時間')
+            try:
+                if Shop.objects.all():
+                    shop_querys = Shop.objects.values_list('start_time')
+                    time_data_list = [(query[0], query[0]) for query in shop_querys]
+                else:
+                    time_data_list = []
+            except:
+                time_data_list = []
+            if not time_data_list:
+                timenow = timezone.datetime(2022, 10, 1, 17, 00)
+                for i in range(5):
+                    time = timenow + timezone.timedelta(hours=i)
+                    time_data_list.append((time.time(), time.time()))
+            time_data_list.insert(0, reserve_time_tup)
+            choices_time = tuple(time_data_list)
+            
+            form.fields['reserve_date'].choices = choices_date
+            form.fields['reserve_num'].choices = choices_num
+            form.fields['reserve_time'].choices = choices_time
+
+        else:
+            # セッションに入力途中のデータがあればそれを使う
+            form = ReserveForm_2(request.session.get('form_data'))
     elif request.method == "POST":
-        form = ReserveForm(request.POST)
+        form = ReserveForm_2(request.POST)
         if form.is_valid():
             # 検証を通過したらPOSTされたデータをsession用のDBに保持し、confirmへリダイレクト
             request.session['form_data'] = request.POST
@@ -92,8 +160,6 @@ def reserve_list(request):
             reserve_date__year=form.years[0][0],
             reserve_date__month=form.months[0][0],
     )
-    print(form.years)
-    print(form.months)
     context = {
             'reserves': reserves,
             'shop_id': shop_id,
