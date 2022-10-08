@@ -11,10 +11,11 @@ def index(request):
     if request.method == "GET":
         if request.session.get('form_data') is None:
             form = ReserveForm_2()
+            """
+            以下は機能設定で考慮された各種プルダウンで表示するためのchoices変数の作成
+            """
+
             # 予約日
-            """
-            設定機能で設定された予約可能日考慮
-            """
             reserve_date_tup = ('', '予約日')
             reservable_range_list = []
         
@@ -36,6 +37,7 @@ def index(request):
                     reservable_range_list.append((date, date))
             reservable_range_list.insert(0, reserve_date_tup)
             choices_date = tuple(reservable_range_list)
+
             # 予約人数
             reserve_num_tup = ('', '予約人数')
             if Shop.objects.exists():
@@ -51,19 +53,21 @@ def index(request):
             choices_num = tuple(num_data_list)
             
             # 予約時間
-            """
-            1時間当たりの予約時間考慮する
-            """
             reserve_time_tup = ('', '予約時間')
-            try:
-                if Shop.objects.all():
-                    shop_querys = Shop.objects.values_list('start_time')
-                    time_data_list = [(query[0], query[0]) for query in shop_querys]
-                else:
-                    time_data_list = []
-            except:
+            if Shop.objects.exists():
+                start_time_query = Shop.objects.select_related('start_time')[0].start_time.start_time
+                end_time_query = Shop.objects.select_related('end_time')[0].end_time.end_time
+                # 0時間のdatetimeオブジェクトを作成、後にリスト内包表記で使用
+                date_obj = start_time_query.replace(0)
+                # 各種datetimeオブジェクトからint型ｎ変換
+                start_time_int = start_time_query.hour
+                end_time_int = end_time_query.hour
+                # int型にした変数をrangeに挿入
+                time_range = range(start_time_int, end_time_int)
+                # リスト内包表記でchoices用のリスト内タプルを作成
+                time_data_list = [(date_obj.replace(t), date_obj.replace(t)) for t in time_range]
+            else:
                 time_data_list = []
-            if not time_data_list:
                 timenow = timezone.datetime(2022, 10, 1, 17, 00)
                 for i in range(5):
                     time = timenow + timezone.timedelta(hours=i)
