@@ -22,14 +22,13 @@ class LoginForm(AuthenticationForm):
         """
 
 
-class ReserveForm_2(forms.ModelForm):
-    print('Hello')
+class ReserveForm(forms.ModelForm):
     """
     models.pyでchoicesの定義をしていたが、forms.pyで処理することにしたので、
     ReserveFormの仮クラスとしてReserveForm_2を定義しChoiceFieldをそれぞれ作成。
     よって今後はこちらのクラスを本格的に使用していく。
     """
-    reserve_date = forms.fields.ChoiceField(
+    reserve_date = forms.ChoiceField(
             label='【1】 予約日を選択',
             widget=forms.Select(attrs={
                 'class': 'form-select',
@@ -112,7 +111,7 @@ class ReserveForm_2(forms.ModelForm):
                 }
 
 
-class ReserveForm(forms.ModelForm):
+class ReserveForm_2(forms.ModelForm):
     """
     予約フォームの自作（注）
     注：ReserveForm_2を使用するように修正する
