@@ -70,79 +70,20 @@ class Reserve(models.Model):
     備考:comment
     """
 
-    """
-    各フィールド引数のchoicesに指定するためのタプル変数作成
-    Shopモデルがまだ未完成なので、その場しのぎの実装
-    
-    # 予約日
-    reserve_date_tup = ('', '予約日')
-    shop_data_list = []
-    datenow = timezone.datetime(2022, 9, 28).date()
-    # for i in range(7):
-    for i in range(1, 730, 30):
-        date = datenow + timezone.timedelta(days=i)
-        shop_data_list.append((date, date))
-    shop_data_list.insert(0, reserve_date_tup)
-    choices_date = tuple(shop_data_list)
-
-    # 予約人数
-    reserve_num_tup = ('', '予約人数')
-    try:
-        if Shop.objects.all():
-            shop_querys = Shop.objects.values_list('max_reserve_num')
-            shop_querys = range(1, shop_querys[0][0]+1)
-            num_data_list = [(query, query) for query in shop_querys]
-        else:
-            num_data_list = []
-    except:
-        num_data_list = []
-    if not num_data_list:
-        for i in range(1, 6):
-            num_data_list.append((i, i))
-    num_data_list.insert(0, reserve_num_tup)
-    choices_num = tuple(num_data_list)
-
-    # 予約時間
-    reserve_time_tup = ('', '予約時間')
-    try:
-        if Shop.objects.all():
-            shop_querys = Shop.objects.values_list('start_time')
-            time_data_list = [(query[0], query[0]) for query in shop_querys]
-        else:
-            time_data_list = []
-    except:
-        time_data_list = []
-    if not time_data_list:
-        timenow = timezone.datetime(2022, 10, 1, 17, 00)
-        for i in range(5):
-            time = timenow + timezone.timedelta(hours=i)
-            time_data_list.append((time.time(), time.time()))
-    time_data_list.insert(0, reserve_time_tup)
-    choices_time = tuple(time_data_list)
-    """
-
     reserve_date = models.DateField(
             verbose_name='予約日',
             max_length=20,
-            #choices=choices_date,
     )
-    # reserve_date = models.ForeignKey(Shop, on_delete=models.PROTECT, verbose_name='予約日')
-
     reserve_time = models.TimeField(
             verbose_name='予約時間',
             max_length=10,
-            #choices=choices_time,
             #unique=True,
             #error_messages={
             #    'unique':'この時間帯はご予約できません。',
             #}
     )
-    
-    # reserve_time = models.ForeignKey(Shop, on_delete=models.CASCADE, verbose_name='予約時間')
     reserve_num = models.IntegerField(
             verbose_name='予約人数',
-            # max_length=10,
-            # choices=choices_num,
     )
     name = models.CharField(verbose_name='氏名', max_length=20)
     email = models.EmailField(
@@ -177,5 +118,4 @@ class Reserve(models.Model):
     def __str__(self):
         return 'Reserveの編集'
     
-
 # Create your models here.
