@@ -176,16 +176,19 @@ def confirm(request):
             time_data_list.append((time.time(), time.time()))
     time_data_list.insert(0, reserve_time_tup)
     choices_time = tuple(time_data_list)
-    
+    # フォームに入力されたデータをフィルタリングして重複しているか確認するための変数
+    reserve_dpc = Reserve.objects.filter(reserve_date=session_form_data['reserve_date'], reserve_time=session_form_data['reserve_time'])
     if request.method == "POST":
-        form = ReserveForm(session_form_data)
+
+        if reserve_dpc.exists() is False: # 重複データが存在しなければ保存に進む
+            form = ReserveForm(session_form_data)
         
-        form.fields['reserve_date'].choices = choices_date
-        form.fields['reserve_num'].choices = choices_num
-        form.fields['reserve_time'].choices = choices_time
-        if form.is_valid():
-            form.save()
-            return redirect('reserve:complete')
+            form.fields['reserve_date'].choices = choices_date
+            form.fields['reserve_num'].choices = choices_num
+            form.fields['reserve_time'].choices = choices_time
+            if form.is_valid():
+                form.save()
+                return redirect('reserve:complete')
     
     """
     reserve_dateとreserve_timeのsession変数はstr型となって格納されるため
@@ -201,7 +204,11 @@ def confirm(request):
             '%H:%M:%S'
     ).time()
 
-    return render(request, 'reserve/confirm.html', {'session_form_data': session_form_data })
+    context = {
+            'session_form_data': session_form_data,
+            'reserve_dpc': reserve_dpc,
+    }
+    return render(request, 'reserve/confirm.html', context)
 
 def complete(request):
     """予約完了画面"""
@@ -230,7 +237,9 @@ def reserve_list(request):
     else:
         shop_id = None
     form = EveryYearForm()
-    reserves = Reserve.objects.filter( # 予約リストでデフォルト表示されるデータをフィルタリング
+    # 予約日と予約時間で絞り込んだ日付順に当日以降のデータを取得して表示する
+    reserves = Reserve.objects.order_by('reserve_date', 'reserve_time').filter( # 予約リストでデフォルト表示されるデータをフィルタリング
+            reserve_date__gte=timezone.now(),
             reserve_date__year=form.years[0][0],
             reserve_date__month=form.months[0][0],
     )

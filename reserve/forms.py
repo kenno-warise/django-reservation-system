@@ -251,7 +251,8 @@ class EveryYearForm(forms.Form):
     """
     予約リスト画面のプルダウンで使うデータを取得
     """
-    year_and_month = Reserve.objects.values_list('reserve_date')
+    # order_byでreserve_dateが近い順に並び替えてからリストとしてデータを取得
+    year_and_month = Reserve.objects.order_by('reserve_date').values_list('reserve_date')
 
     # choiece用の年を取得
     year_list = [t[0].year for t in year_and_month]
