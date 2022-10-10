@@ -23,14 +23,15 @@
 
     <h1>予約確認画面</h1>
 
-    {% if reserve_dpc %}
+    <!-- resultに0以上の要素が格納されていたらアラートを表示する -->
+    {% if 0 <= result %}
     <div class="alert alert-danger d-flex align-items-center" role="alert">
       <div class="me-3">
       <i class="bi bi-exclamation-diamond confirm-icon"></i></svg>
       </div>  
     <div>
       {{ session_form_data.reserve_date | date:"n/j (l)" | cut:"曜日" }} {{ session_form_data.reserve_time }}
-      はいっぱいの為、ご予約できません。申し訳ございませんが「他の日付」、もしくは「他の時間帯」にご予約願います。
+      は残り{{ result }}名様のみとなるのでご予約できません。申し訳ございませんが「他の日付」、もしくは「他の時間帯」にご予約願います。
       </div>
     </div>
     {% endif %}
@@ -66,7 +67,8 @@
 
     <form method="POST" action"{% url 'reserve:complete' %}">{% csrf_token %}
       <div class="d-grid gap-2 mx-3">
-	{% if reserve_dpc %}
+	<!-- resultに0以上の要素が格納されていたら予約確定ボタンを非表示にする -->
+	{% if 0 <= result %}
 	{% else %}
 	<button class="btn btn-primary rounded-pill" type="submit">予約確定</button>
 	{% endif %}
