@@ -176,11 +176,23 @@ def confirm(request):
             time_data_list.append((time.time(), time.time()))
     time_data_list.insert(0, reserve_time_tup)
     choices_time = tuple(time_data_list)
-    # フォームに入力されたデータをフィルタリングして重複しているか確認するための変数
-    reserve_dpc = Reserve.objects.filter(reserve_date=session_form_data['reserve_date'], reserve_time=session_form_data['reserve_time'])
+    # sessionから予約日と予約時間を使用してDBに同じ日時のデータが保存されていないかフィルタリングする
+    reserve_query = Reserve.objects.filter(reserve_date=session_form_data['reserve_date'], reserve_time=session_form_data['reserve_time'])
+    # Shopテーブルから現在の1時間当たりの予約上限数を取得する
+    shop_max_num = Shop.objects.select_related('max_reserve_num')[0].max_reserve_num.max_reserve_num
+    # Reserveテーブルから取得した日時データの予約人数を合計する
+    reserve_max_num_sum = sum([query.reserve_num for query in reserve_query])
+    # 予約上限数と合計値を引き算する
+    remaining_limit = abs(shop_max_num - reserve_max_num_sum)
+    # 残りの予約上限人数以下であればresultはNone値を代入する
+    if remaining_limit >= int(session_form_data['reserve_num']):
+        result = None
+    else: # 予約上限人数以上であればエラー処理のための要素をresultに代入する
+        result = remaining_limit
+
     if request.method == "POST":
 
-        if reserve_dpc.exists() is False: # 重複データが存在しなければ保存に進む
+        if remaining_limit >= int(session_form_data['reserve_num']): # 残り数以下であれば予約を保存する
             form = ReserveForm(session_form_data)
         
             form.fields['reserve_date'].choices = choices_date
@@ -206,7 +218,7 @@ def confirm(request):
 
     context = {
             'session_form_data': session_form_data,
-            'reserve_dpc': reserve_dpc,
+            'result': result,
     }
     return render(request, 'reserve/confirm.html', context)
 
