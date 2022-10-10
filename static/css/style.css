@@ -40,6 +40,10 @@ header {
   padding-bottom: 20px;
 }
 
+.confirm-icon {
+  font-size: 3rem;
+}
+
 .complete-icon {
   font-size: 3rem;
   color: green;
