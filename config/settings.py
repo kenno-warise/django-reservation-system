@@ -140,6 +140,7 @@ LOGOUT_REDIRECT_URL = 'reserve:index'
 
 # メールサーバー
 
+# 環境変数から値を取得
 GMAIL_USER = os.environ['EMAIL_HOST_USER']
 GMAIL_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
 
