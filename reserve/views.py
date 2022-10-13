@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView, LogoutView
+from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 
@@ -261,6 +262,30 @@ def reserve_list(request):
             'form': form,
     }
     return render(request, 'reserve/reserve_list.html', context)
+
+def pulldown_access(request):
+    """予約リスト画面のプルダウンによる非同期処理"""
+    # javascriptから送られてきた要素を取得
+    select_value = request.POST.get('year_val')
+    if not select_value: # 値が存在しなければデフォルトの予約リスト画面を表示
+        return redirect('reserve:reserve_list')
+    # 「,」に合わせてsplitする
+    select_value = select_value.split(',')
+    result_query = Reserve.objects.order_by('reserve_date', 'reserve_time').filter(
+            reserve_date__gte=timezone.now(),
+            reserve_date__year=int(select_value[0]),
+            reserve_date__month=int(select_value[1]),
+    )
+    # javascriptでイテレーションするためにリスト内辞書に変換
+    query_list = list(result_query.values())
+    # 表記を日本人向け（デフォルトのフォーマット）にするため、曜日を設定
+    weeks = {'Monday':'（月）', 'Tuesday':'（火）', 'Wednesday':'（水）', 'Thursday':'（木）', 'Friday':'（金）', 'Saturday':'（土）', 'Sunday':'（日）'}
+    # デフォルトのフォーマットに合わせるため、各辞書のキーに代入
+    for query in query_list:
+        query['reserve_date'] = query['reserve_date'].strftime('%m/%d')+weeks[query['reserve_date'].strftime('%A')]
+        query['reserve_time'] = query['reserve_time'].strftime('%H:%M')
+    
+    return JsonResponse({'query_list': query_list})
 
 @login_required
 def setting(request, id):

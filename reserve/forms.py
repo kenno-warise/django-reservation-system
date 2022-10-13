@@ -272,9 +272,9 @@ class EveryYearForm(forms.Form):
 
     year_pulldown = forms.ChoiceField(
             choices=years,
-            widget=forms.widgets.Select(attrs={'class': 'form-select'}),
+            widget=forms.widgets.Select(attrs={'class': 'form-select', 'id': 'year_pulldown'}),
     )
     month_pulldown = forms.ChoiceField(
             choices=months,
-            widget=forms.widgets.Select(attrs={'class': 'form-select'}),
+            widget=forms.widgets.Select(attrs={'class': 'form-select', 'id': 'month_pulldown'}),
     )
