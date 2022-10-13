@@ -12,4 +12,5 @@ urlpatterns = [
         path('logout/', views.Logout.as_view(), name='logout'),
         path('reserve_list/', views.reserve_list, name='reserve_list'),
         path('setting/<int:id>', views.setting, name='setting'),
+        path('pulldown_access/', views.pulldown_access, name='pulldown_access'),
 ]
