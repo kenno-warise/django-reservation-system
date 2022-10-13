@@ -89,10 +89,10 @@ class Reserve(models.Model):
     email = models.EmailField(
             verbose_name='メールアドレス',
             max_length=100,
-            unique=True,
-            error_messages={
-                'unique':'こちらのメールアドレスで既にご予約がされています。',
-            }
+            #unique=True,
+            #error_messages={
+            #    'unique':'こちらのメールアドレスで既にご予約がされています。',
+            #}
     )
     # RegexValidatorを使用すると正規表現でバリデーションをかけることができる
     num_regex = RegexValidator(
