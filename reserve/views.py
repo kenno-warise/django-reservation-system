@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView, LogoutView
+from django.core.mail import send_mail
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
@@ -79,7 +80,6 @@ def index(request):
         form.fields['reserve_date'].choices = choices_date
         form.fields['reserve_num'].choices = choices_num
         form.fields['reserve_time'].choices = choices_time
-
         if form.is_valid():
             # 検証を通過したらPOSTされたデータをsession用のDBに保持し、confirmへリダイレクト
             request.session['form_data'] = request.POST
@@ -201,6 +201,23 @@ def confirm(request):
             form.fields['reserve_time'].choices = choices_time
             if form.is_valid():
                 form.save()
+
+                # 予約が保存されたら予約者にメールの送信
+                subject = "ご予約ありがとうございます"
+                message = "予約日: {}\n予約時間: {}\n予約人数: {}\n予約者: {}\nEmail: {}\nTEL: {}\nComment: {}".format(
+                        form.data['reserve_date'],
+                        form.data['reserve_time'],
+                        form.data['reserve_num'],
+                        form.data['name'],
+                        form.data['email'],
+                        form.data['tel'],
+                        form.data['comment'],
+                )
+                from_email = "a.a@com"#"zerofromlight0325@gmail.com" # 送信者（送信者のアドレスはsettingsに設定された値
+                recipient_list = [form.data['email']] # 受信者
+
+                send_mail(subject, message, from_email, recipient_list)
+
                 return redirect('reserve:complete')
     
     """

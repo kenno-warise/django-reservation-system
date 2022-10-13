@@ -136,3 +136,16 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = 'reserve:login'
 LOGIN_REDIRECT_URL = 'reserve:reserve_list'
 LOGOUT_REDIRECT_URL = 'reserve:index'
+
+
+# メールサーバー
+
+GMAIL_USER = os.environ['EMAIL_HOST_USER']
+GMAIL_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = GMAIL_USER
+EMAIL_HOST_PASSWORD = GMAIL_PASSWORD
+EMAIL_USE_TLS = True
+
