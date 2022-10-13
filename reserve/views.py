@@ -1,10 +1,11 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView, LogoutView
-from django.core.mail import send_mail
+from django.core.mail import send_mass_mail
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 
+from config import settings
 from .forms import ReserveForm, LoginForm, ShopForm, EveryYearForm
 from .models import Reserve, Shop
 
@@ -195,15 +196,17 @@ def confirm(request):
 
         if remaining_limit >= int(session_form_data['reserve_num']): # 残り数以下であれば予約を保存する
             form = ReserveForm(session_form_data)
-        
+            # 以下の代入がなければ各フォームがエラーとなってしまう
             form.fields['reserve_date'].choices = choices_date
             form.fields['reserve_num'].choices = choices_num
             form.fields['reserve_time'].choices = choices_time
+
             if form.is_valid():
                 form.save()
 
-                # 予約が保存されたら予約者にメールの送信
-                subject = "ご予約ありがとうございます"
+                # 予約が保存されたらメールの送信処理に入る
+                subject_reserve = "ご予約ありがとうございます"
+                subject_admin = "予約を至りました"
                 message = "予約日: {}\n予約時間: {}\n予約人数: {}\n予約者: {}\nEmail: {}\nTEL: {}\nComment: {}".format(
                         form.data['reserve_date'],
                         form.data['reserve_time'],
@@ -213,10 +216,16 @@ def confirm(request):
                         form.data['tel'],
                         form.data['comment'],
                 )
-                from_email = "a.a@com"#"zerofromlight0325@gmail.com" # 送信者（送信者のアドレスはsettingsに設定された値
+                from_email = "" # 送信者（送信者のアドレスはsettingsに設定された値
                 recipient_list = [form.data['email']] # 受信者
-
-                send_mail(subject, message, from_email, recipient_list)
+                recipient_admin = [settings.EMAIL_HOST_USER]
+                
+                # 予約者送信設定
+                message_reserve = (subject_reserve, message, from_email, recipient_list)
+                # 管理人送信設定
+                message_admin = (subject_admin, message, from_email, recipient_admin)
+                # 予約者と管理人にそれぞれメールを送信
+                send_mass_mail((message_reserve, message_admin))
 
                 return redirect('reserve:complete')
     
