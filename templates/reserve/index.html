@@ -20,6 +20,7 @@
 
     <h1>ご来店予約</h1>
 
+    {% if shop_boolean %}
     <form class="m-3" method="POST" action="{% url 'reserve:index' %}" novalidate>
       {% csrf_token %}
       <!-- formのインスタンス変数にはform.as_pやイテレーションで出力できるが、以下のやり方は今回の実装にちょうど良い
@@ -80,6 +81,9 @@
       </div>
 
     </form>
+    {% else %}
+    <h1>現在ご予約は受け付けておりません</h1>
+    {% endif %}
 
     <!-- Optional JavaScript; choose one of the two! -->
 

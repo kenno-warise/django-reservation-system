@@ -5,6 +5,7 @@ from . import views
 app_name = "reserve"
 
 urlpatterns = [
+    path("", views.top, name="top"),
     path("index/", views.index, name="index"),
     path("confirm/", views.confirm, name="confirm"),
     path("complete/", views.complete, name="complete"),
