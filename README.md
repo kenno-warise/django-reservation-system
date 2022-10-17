@@ -34,10 +34,26 @@ YouTubeで発信されている徳田啓（トクダ　ケイ）さんによる�
 
 ### 顧客用の予約確認画面（confirm）
 
+![reserve_confirm](https://user-images.githubusercontent.com/51676019/196093383-94f1dc0f-0922-45d8-9db8-d8d3a586eb3d.jpg)
+
+![reserve_confirm_2](https://user-images.githubusercontent.com/51676019/196093398-6a5ee77d-d28b-4775-831b-857d5eca9fcf.jpg)
+
+![reserve_confirm_3](https://user-images.githubusercontent.com/51676019/196093417-b1dfe2b3-cdc7-4b49-8e1b-869307d858ae.jpg)
+
 ### 顧客用の予約完了画面（complete）
+
+![reserve_complete](https://user-images.githubusercontent.com/51676019/196093506-fc8d16ca-b832-47f0-8a18-b85a73ecae1c.jpg)
 
 ### 店舗用のログイン画面（login）
 
+![reserve_login](https://user-images.githubusercontent.com/51676019/196093533-dc87f959-cd41-49d6-b553-0c40674c9ac4.jpg)
+
 ### 店舗用の予約リスト画面（reserve_list）
 
+![reserve_reserve_list](https://user-images.githubusercontent.com/51676019/196093557-24a5840e-d629-4ad3-9eb0-e499093f8884.jpg)
+
+![reserve_reserve_list_2](https://user-images.githubusercontent.com/51676019/196093567-7f4ab81b-7c94-436d-88f2-1060f6446f60.jpg)
+
 ### 店舗用の設定画面（setting/id/）
+
+![reserve_setting](https://user-images.githubusercontent.com/51676019/196093575-c3dfff41-04be-428b-9ca6-132f2c35f281.jpg)
