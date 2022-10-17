@@ -28,6 +28,10 @@ YouTubeで発信されている徳田啓（トクダ　ケイ）さんによる�
 
 ![reserve_index](https://user-images.githubusercontent.com/51676019/196092889-3957fe3f-1340-45af-a82c-097435b2f4ed.jpg)
 
+![reserve_index_2](https://user-images.githubusercontent.com/51676019/196093156-0ac9edff-07d2-4fd3-9f4c-e553439f5a1b.jpg)
+
+![reserve_index_3](https://user-images.githubusercontent.com/51676019/196093180-07bd27cf-dd88-4508-99da-9cada54d2484.jpg)
+
 ### 顧客用の予約確認画面（confirm）
 
 ### 顧客用の予約完了画面（complete）
