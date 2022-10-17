@@ -1,3 +1,3 @@
 # Djangoフレームワークによる店舗用Web予約システム
 
-<iframe width="560" height="315" src="https://www.youtube.com/watch?v=V7aiz1JfMHw" frameborder="0" allowfullscreen></iframe>
+![【開発実況シリーズ】店舗用Web予約システムを作る#1 企画編【プログラミング】](https://www.youtube.com/watch?v=V7aiz1JfMHw)
