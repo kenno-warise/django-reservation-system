@@ -36,15 +36,23 @@ YouTubeで発信されている徳田啓（トクダ　ケイ）さんによる�
 
 ![reserve_index_2](https://user-images.githubusercontent.com/51676019/196093156-0ac9edff-07d2-4fd3-9f4c-e553439f5a1b.jpg)
 
-「備考欄」以外のフォームは必須なため、入力せずに「確認画面」のボタンをクリックしてしまうとエラーが発生します。
+「備考欄」以外のフォームは必須なため、入力せずに「確認画面へ」のボタンをクリックしてしまうとエラーが発生します。
 
 ![reserve_index_3](https://user-images.githubusercontent.com/51676019/196093180-07bd27cf-dd88-4508-99da-9cada54d2484.jpg)
 
 ### 顧客用の予約確認画面（confirm）
 
+予約画面での入力フォームデータが問題無くクリアされ、予約確認画面へ遷移されると「/confirm」というURLにリダイレクトされます。
+
+以下は正常に表示された場合の画です。
+
 ![reserve_confirm](https://user-images.githubusercontent.com/51676019/196093383-94f1dc0f-0922-45d8-9db8-d8d3a586eb3d.jpg)
 
+エラーが発生した場合は以下のようにアラートが表示されます。このエラーの内容は店舗側で行える「設定」によって時間当たりの予約人数を「５」に設定しており、既にこの日付けと時間では「１人」の予約が完了されているので、「５人」以上での予約は受け付けできないという事になります。
+
 ![reserve_confirm_2](https://user-images.githubusercontent.com/51676019/196093398-6a5ee77d-d28b-4775-831b-857d5eca9fcf.jpg)
+
+確認画面から「戻る」と入力されたデータが保持されています。
 
 ![reserve_confirm_3](https://user-images.githubusercontent.com/51676019/196093417-b1dfe2b3-cdc7-4b49-8e1b-869307d858ae.jpg)
 
