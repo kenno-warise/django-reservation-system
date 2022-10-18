@@ -1,4 +1,4 @@
-# Djangoフレームワークによる店舗用Web予約システム
+# Djangoフレームワークによる店舗用Web予約システム（未完成）
 
 ## 概要
 
@@ -52,24 +52,38 @@ YouTubeで発信されている徳田啓（トクダ　ケイ）さんによる�
 
 ![reserve_confirm_2](https://user-images.githubusercontent.com/51676019/196093398-6a5ee77d-d28b-4775-831b-857d5eca9fcf.jpg)
 
-確認画面から「戻る」と入力されたデータが保持されています。
+確認画面から「戻る」ボタンをクリックすると、入力したデータが保持された状態で再入力を行えます。
 
 ![reserve_confirm_3](https://user-images.githubusercontent.com/51676019/196093417-b1dfe2b3-cdc7-4b49-8e1b-869307d858ae.jpg)
 
 ### 顧客用の予約完了画面（complete）
 
+「予約完了」ボタンがクリックされると、顧客が入力した「Email」アドレス宛と店舗側のメールアドレスへ予約完了メールが送信されます。それと同時に「/complete」のURLへアクセスされ以下のような画面にリダイレクトされます。
+
 ![reserve_complete](https://user-images.githubusercontent.com/51676019/196093506-fc8d16ca-b832-47f0-8a18-b85a73ecae1c.jpg)
 
 ### 店舗用のログイン画面（login）
+
+店舗側の人間がシステムにログインするために「/login」URLにアクセスするか、予約リストを確認できる「/reserve_list」URLにアクセスするとログイン画面が表示されます。
+
+ログインが完了すると、予約リストの「/reserve_list」URLへリダイレクトされます。
 
 ![reserve_login](https://user-images.githubusercontent.com/51676019/196093533-dc87f959-cd41-49d6-b553-0c40674c9ac4.jpg)
 
 ### 店舗用の予約リスト画面（reserve_list）
 
+予約リストでは当日以降のリストをデフォルトで表示しています。
+
 ![reserve_reserve_list](https://user-images.githubusercontent.com/51676019/196093557-24a5840e-d629-4ad3-9eb0-e499093f8884.jpg)
+
+プルダウンで設置してある西暦と月で絞り込みが容易にできるように非同期処理でリストを表示できるようにしています。
 
 ![reserve_reserve_list_2](https://user-images.githubusercontent.com/51676019/196093567-7f4ab81b-7c94-436d-88f2-1060f6446f60.jpg)
 
 ### 店舗用の設定画面（setting/id/）
+
+設定画面では、プルダウンによって予約に関する設定を行えます。
+
+設定画面で設定項目を選択するには管理画面での初設定が必要になるため、管理者は予め各種項目をデータベースに保存しておきます。
 
 ![reserve_setting](https://user-images.githubusercontent.com/51676019/196093575-c3dfff41-04be-428b-9ca6-132f2c35f281.jpg)
